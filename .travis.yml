@@ -1,0 +1,19 @@
+dist: xenial
+cache:
+  pip: true
+services:
+- docker
+before_install:
+- pip install --user awscli
+- sudo apt install curl gnupg
+- curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor > bazel.gpg
+- sudo mv bazel.gpg /etc/apt/trusted.gpg.d/
+- echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
+- sudo apt-get -y install bazel
+- sudo apt update && sudo apt install bazel
+#- cd /tmp && curl -L -J -O https://github.com/swig/swig/archive/v4.0.2.tar.gz && tar xzvf swig-4.0.2.tar.gz && cd swig-4.0.2 && ./configure && make && sudo make install
+- 'echo dev tag: ${DOCKER_TAG_DEV}'
+- 'echo prod tag: ${DOCKER_TAG_PROD}'
+# blah
+script:
+  - bazel --version
