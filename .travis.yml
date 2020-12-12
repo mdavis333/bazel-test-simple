@@ -2,7 +2,7 @@ dist: xenial
 language: c
 os:
   - linux
-#  - osx
+  - osx
 #compiler:
 #  - gcc
 #  - clang
