@@ -11,17 +11,18 @@ cache:
 services:
 - docker
 before_install:
-- pip install --user awscli
-- if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install bazel          ; fi
-- sudo apt install curl gnupg
-- curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor > bazel.gpg
-- sudo mv bazel.gpg /etc/apt/trusted.gpg.d/
-- echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
-- sudo apt update && sudo apt install bazel
-#- cd /tmp && curl -L -J -O https://github.com/swig/swig/archive/v4.0.2.tar.gz && tar xzvf swig-4.0.2.tar.gz && cd swig-4.0.2 && ./configure && make && sudo make install
-- 'echo dev tag: ${DOCKER_TAG_DEV}'
-- 'echo prod tag: ${DOCKER_TAG_PROD}'
-# blah
+  - OS=linux
+  - ARCH=x86_64
+  - V=3.7.1
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then OS=darwin; fi
+  - GH_BASE="https://github.com/bazelbuild/bazel/releases/download/$V"
+  - GH_ARTIFACT="bazel-$V-installer-$OS-$ARCH.sh"
+  - URL="$GH_BASE/$GH_ARTIFACT"
+  - echo $URL
+  - wget -O install.sh $URL
+  - chmod +x install.sh
+  - ./install.sh --user
+  - rm -f install.sh
 script:
   - bazel --version
 
