@@ -1,1 +1,3 @@
 # bazel-test-simple
+
+test
